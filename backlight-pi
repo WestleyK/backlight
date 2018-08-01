@@ -1,0 +1,93 @@
+#!/bin/bash
+#
+# Created by: Westley
+# Date: Jul 31, 2018
+# version-1.0.3
+# https://github.com/WestleyK/backlight
+#
+# verry simple, yet packed with feature!
+#
+
+set -e
+
+VERSION_SCRIPT="version-1.0.3"
+DATE_SCRIPT="Date: Jul 31, 2018"
+
+INCREMENT_UP=20
+INCREMENT_DOWN=20
+BACKLIGHT_BRIGHTNESS="/sys/class/backlight/rpi_backlight/brightness"
+BACKLIGHT_POWER="/sys/class/backlight/rpi_backlight/bl_power"
+
+CURRENT=$( cat $BACKLIGHT_BRIGHTNESS)
+
+is_writable() {
+	if [[ ! -w  $BACKLIGHT_BRIGHTNESS ]]; then
+		echo -e -n "\033[0;31mERROR: \033[0m"
+		echo "file not writable: "$BACKLIGHT_BRIGHTNESS
+		echo "Try: sudo <COMMAND>"
+		exit
+	fi
+}
+
+sleep_mode() {
+	is_writable
+	echo "Press <ENTER> to exit this mode:"
+	sleep 1s
+	echo 1 > $BACKLIGHT_POWER
+	read INPUT_SLEEP
+	echo 0 > $BACKLIGHT_POWER
+	exit
+}
+
+if [[ -n $1 ]]; then
+	if [[ $1 = "h" || $1 = "help" ]]; then
+		echo "Usage: simple-backlight [OPTION]
+	h | help (print help menu)
+	15-255 (adjust from 15-255)
+	u | up (adjust up by 20)
+	d | down (adjust down by 20)
+	s | sleep (enter sleep mode)
+	v | version (print version)
+Source code: https://github.com/WestleyK/???"
+		exit
+	elif [[ $1 = "u" || $1 = "up" ]]; then
+		NEW=$((CURRENT + $INCREMENT_UP))
+	elif [[ $1 = "d" || $1 = "down" ]]; then
+		NEW=$((CURRENT - $INCREMENT_DOWN))
+	elif [[ $1 = "s" || $1 = "sleep" ]]; then
+		sleep_mode
+	elif [[ $1 -ge 15 && $1 -le 255 ]]; then
+		NEW=$1
+	elif [[ $1 = "v" || $1 = "version" ]]; then
+		echo $VERSION_SCRIPT
+		echo $DATE_SCRIPT
+		exit
+	else
+		echo "Option not found: "$1
+		exit
+	fi
+fi
+if [[ -z $1 ]]; then
+	echo "Current brightness: "$CURRENT
+	exit
+fi
+
+if [[ $NEW -ge 255 ]]; then
+	NEW=255
+	echo "Max brightness!"
+elif [[ $NEW -lt 15 ]]; then
+	NEW=15
+	echo "Min brightness"
+fi
+is_writable
+echo $NEW > $BACKLIGHT_BRIGHTNESS
+echo "Current brightness: "$NEW
+
+
+
+
+#
+# End script
+#
+
+
