@@ -125,7 +125,7 @@ else
 	echo "Usage: sudo ./install [OPTION]
 		-u | -update (update command and repo)
 		-r | -uninstall (uninstall command)
-	Sorce code: https://github.com/WestleyK/install-script"
+	Sorce code: https://github.com/WestleyK/backlight"
 	exit
 fi
 
