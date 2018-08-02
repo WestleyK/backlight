@@ -1,17 +1,44 @@
 #!/bin/bash
 #
-# Created by: Westley
-# Date: Jul 31, 2018
-# version-1.0.3
+# Created by: Westley K
+# email: westley@sylabs.io
+# Date: Aug 1, 2018
+# version-1.0.4
 # https://github.com/WestleyK/backlight
 #
-# verry simple, yet packed with feature!
+# Verry simple, yet packed with feature!
+# Designed and tested for raspberry pi with official 7 inch touchdcreen.
+#
+#
+# MIT License
+#
+# Copyright (c) 2018 WestleyK
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
 #
 
+
+# incase somthing gose wrong
 set -e
 
-VERSION_SCRIPT="version-1.0.3"
-DATE_SCRIPT="Date: Jul 31, 2018"
+VERSION_SCRIPT="version-1.0.4"
+DATE_SCRIPT="Date: Aug 1, 2018"
 
 INCREMENT_UP=20
 INCREMENT_DOWN=20
@@ -20,12 +47,24 @@ BACKLIGHT_POWER="/sys/class/backlight/rpi_backlight/bl_power"
 
 CURRENT=$( cat $BACKLIGHT_BRIGHTNESS)
 
+help_menu() {
+	echo "Usage: simple-backlight [OPTION]
+	h | help (print help menu)
+	15-255 (adjust from 15-255)
+	u | up (adjust up by 20)
+	d | down (adjust down by 20)
+	s | sleep (enter sleep mode)
+	v | version (print version)
+Source code: https://github.com/WestleyK/backlight"
+	exit 0
+}
+
 is_writable() {
 	if [[ ! -w  $BACKLIGHT_BRIGHTNESS ]]; then
 		echo -e -n "\033[0;31mERROR: \033[0m"
 		echo "file not writable: "$BACKLIGHT_BRIGHTNESS
-		echo "Try: sudo <COMMAND>"
-		exit
+		echo "Try: sudo backlight-pi"
+		exit 1
 	fi
 }
 
@@ -36,20 +75,13 @@ sleep_mode() {
 	echo 1 > $BACKLIGHT_POWER
 	read INPUT_SLEEP
 	echo 0 > $BACKLIGHT_POWER
-	exit
+	exit 0
 }
 
 if [[ -n $1 ]]; then
 	if [[ $1 = "h" || $1 = "help" ]]; then
-		echo "Usage: simple-backlight [OPTION]
-	h | help (print help menu)
-	15-255 (adjust from 15-255)
-	u | up (adjust up by 20)
-	d | down (adjust down by 20)
-	s | sleep (enter sleep mode)
-	v | version (print version)
-Source code: https://github.com/WestleyK/???"
-		exit
+		help_menu
+		exit 0
 	elif [[ $1 = "u" || $1 = "up" ]]; then
 		NEW=$((CURRENT + $INCREMENT_UP))
 	elif [[ $1 = "d" || $1 = "down" ]]; then
@@ -64,12 +96,12 @@ Source code: https://github.com/WestleyK/???"
 		exit
 	else
 		echo "Option not found: "$1
-		exit
+		exit 1
 	fi
 fi
 if [[ -z $1 ]]; then
 	echo "Current brightness: "$CURRENT
-	exit
+	exit 0
 fi
 
 if [[ $NEW -ge 255 ]]; then
@@ -83,7 +115,7 @@ is_writable
 echo $NEW > $BACKLIGHT_BRIGHTNESS
 echo "Current brightness: "$NEW
 
-
+exit 0
 
 
 #
