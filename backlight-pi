@@ -2,8 +2,8 @@
 #
 # Created by: Westley K
 # email: westley@sylabs.io
-# Date: Aug 1, 2018
-# version-1.0.4
+# Date: Aug 6, 2018
+# version-1.0.5
 # https://github.com/WestleyK/backlight
 #
 # Verry simple, yet packed with feature!
@@ -37,18 +37,18 @@
 # incase somthing gose wrong
 set -e
 
-VERSION_SCRIPT="version-1.0.4"
-DATE_SCRIPT="Date: Aug 1, 2018"
+VERSION_SCRIPT="version-1.0.5"
+DATE_SCRIPT="Date: Aug 6, 2018"
 
 INCREMENT_UP=20
 INCREMENT_DOWN=20
 BACKLIGHT_BRIGHTNESS="/sys/class/backlight/rpi_backlight/brightness"
 BACKLIGHT_POWER="/sys/class/backlight/rpi_backlight/bl_power"
 
-CURRENT=$( cat $BACKLIGHT_BRIGHTNESS)
+CURRENT=$( cat $BACKLIGHT_BRIGHTNESS )
 
 help_menu() {
-	echo "Usage: simple-backlight [OPTION]
+	echo "Usage: backlight-pi [OPTION]
 	h | help (print help menu)
 	15-255 (adjust from 15-255)
 	u | up (adjust up by 20)
@@ -60,7 +60,7 @@ Source code: https://github.com/WestleyK/backlight"
 }
 
 is_writable() {
-	if [[ ! -w  $BACKLIGHT_BRIGHTNESS ]]; then
+	if [[ ! -w $BACKLIGHT_BRIGHTNESS ]]; then
 		echo -e -n "\033[0;31mERROR: \033[0m"
 		echo "file not writable: "$BACKLIGHT_BRIGHTNESS
 		echo "Try: sudo backlight-pi"
@@ -93,12 +93,13 @@ if [[ -n $1 ]]; then
 	elif [[ $1 = "v" || $1 = "version" ]]; then
 		echo $VERSION_SCRIPT
 		echo $DATE_SCRIPT
-		exit
+		exit 0
 	else
 		echo "Option not found: "$1
 		exit 1
 	fi
 fi
+
 if [[ -z $1 ]]; then
 	echo "Current brightness: "$CURRENT
 	exit 0
@@ -121,5 +122,4 @@ exit 0
 #
 # End script
 #
-
 
