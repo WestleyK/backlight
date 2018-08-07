@@ -6,11 +6,6 @@ Designed and tested for raspberry pi with official 7 inch touchdcreen.
 <br>
 <br>
 
-
-
-<br>
-<br>
-
 ## Install:
 
 ```
