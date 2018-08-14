@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 #
 # Created by: Westley K
 # email: westley@sylabs.io
