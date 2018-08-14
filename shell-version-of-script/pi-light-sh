@@ -1,0 +1,125 @@
+#!/bin/sh
+#
+# Created by: Westley K
+# email: westley@sylabs.io
+# Date: Aug 14, 2018
+# version-1.0.8
+# https://github.com/WestleyK/backlight
+#
+# Verry simple, yet packed with feature!
+# Designed and tested for raspberry pi with official 7 inch touchdcreen.
+#
+#
+# MIT License
+#
+# Copyright (c) 2018 WestleyK
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+#
+
+
+# incase somthing gose wrong
+set -e
+
+VERSION_SCRIPT="version-1.0.8"
+DATE_SCRIPT="Date: Aug 14, 2018"
+
+INCREMENT_UP=20
+INCREMENT_DOWN=20
+BACKLIGHT_BRIGHTNESS="/sys/class/backlight/rpi_backlight/brightness"
+BACKLIGHT_POWER="/sys/class/backlight/rpi_backlight/bl_power"
+
+CURRENT=` cat $BACKLIGHT_BRIGHTNESS `
+
+help_menu() {
+	echo "Usage: backlight-pi [OPTION]
+	h | help (print help menu)
+	15-255 (adjust from 15-255)
+	u | up (adjust up by 20)
+	d | down (adjust down by 20)
+	s | sleep (enter sleep mode)
+	v | version (print version)
+Source code: https://github.com/WestleyK/backlight"
+	exit 0
+}
+
+is_writable() {
+	if [ ! -w $BACKLIGHT_BRIGHTNESS ]; then
+		echo "\033[0;31mERROR: \033[0m\c"
+		echo "file not writable: $BACKLIGHT_BRIGHTNESS"
+		echo "Try: sudo backlight-pi"
+		exit 1
+	fi
+}
+
+sleep_mode() {
+	is_writable
+	echo "Press <ENTER> to exit this mode:"
+	sleep 1s
+	echo "1" > $BACKLIGHT_POWER
+	read INPUT_SLEEP
+	echo "0" > $BACKLIGHT_POWER
+	exit 0
+}
+
+if [ ! -z $1 ]; then
+	if [ "$1" = "h" ] || [ "$1" = "help" ]; then
+		help_menu
+		exit 0
+	elif [ "$1" = "u" ] || [ "$1" = "up" ]; then
+        NEW=$((CURRENT + $INCREMENT_UP))
+	elif [ "$1" = "d" ] || [ "$1" = "down" ]; then
+		NEW=$((CURRENT - $INCREMENT_DOWN))
+	elif [ "$1" = "s" ] || [ "$1" = "sleep" ]; then
+		sleep_mode
+    elif [ "$1" -ge "15" 2> /dev/null ] && [ "$1" -le "255" 2> /dev/null ]; then
+		NEW=$1
+	elif [ "$1" = "v" ] || [ "$1" = "version" ]; then
+		echo $VERSION_SCRIPT
+		echo $DATE_SCRIPT
+		exit 0
+	else
+		echo "Option not found: $1"
+		exit 1
+	fi
+fi
+
+if [ -z $1 ]; then
+	echo "Current brightness: $CURRENT"
+	exit 0
+fi
+
+if [ $NEW -ge 255 ]; then
+	NEW=255
+	echo "Max brightness!"
+elif [ $NEW -lt 15 ]; then
+	NEW=15
+	echo "Min brightness"
+fi
+is_writable
+echo $NEW > $BACKLIGHT_BRIGHTNESS
+echo "Current brightness: $NEW"
+
+exit 0
+
+
+#
+# End script
+#
+
