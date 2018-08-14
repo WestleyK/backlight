@@ -3,7 +3,7 @@
 # Created by: Westley K
 # email: westley@sylabs.io
 # Date: Aug 14, 2018
-# version-1.0.8
+# version-1.0.9
 # https://github.com/WestleyK/backlight
 #
 # Verry simple, yet packed with feature!
@@ -37,7 +37,7 @@
 # incase somthing gose wrong
 set -e
 
-VERSION_SCRIPT="version-1.0.8"
+VERSION_SCRIPT="version-1.0.9"
 DATE_SCRIPT="Date: Aug 14, 2018"
 
 INCREMENT_UP=20
@@ -61,7 +61,7 @@ Source code: https://github.com/WestleyK/backlight"
 
 is_writable() {
 	if [ ! -w $BACKLIGHT_BRIGHTNESS ]; then
-		echo "\033[0;31mERROR: \033[0m\c"
+		printf "\033[0;31mERROR: \033[0m"
 		echo "file not writable: $BACKLIGHT_BRIGHTNESS"
 		echo "Try: sudo backlight-pi"
 		exit 1
