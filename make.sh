@@ -3,7 +3,7 @@
 # Created by: Westley K
 # email: westley@sylabs.io
 # Date: Aug 15, 2018
-# version-1.1.1
+# version-1.1.2
 # https://github.com/WestleyK/backlight
 #
 # MIT License
@@ -30,7 +30,7 @@
 #
 
 
-SCRIPT_VERSION="version-1.1.1"
+SCRIPT_VERSION="version-1.1.2"
 SCRIPT_DATE="Aug 15, 2018"
 
 # the name of the script to install,
@@ -78,7 +78,7 @@ install_script() {
 		echo "$SCRIPT_NAME is already installed to: $PATH_INSTALL"
 		echo "Continuing will overide the existing script"
 		echo "Do you want to continue?"
-		echo -n "[y,n]:"
+		printf "[y,n]:"
 		read INPUT
 		if [ "$INPUT" = "y" ] || [ "$INPUT" = "Y" ]; then
 			echo "Overriding existing file..."
