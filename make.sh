@@ -2,8 +2,8 @@
 #
 # Created by: Westley K
 # email: westley@sylabs.io
-# Date: Jul 31, 2018
-# version-1.1.0
+# Date: Aug 15, 2018
+# version-1.1.1
 # https://github.com/WestleyK/backlight
 #
 # MIT License
@@ -30,7 +30,7 @@
 #
 
 
-SCRIPT_VERSION="version-1.1.0"
+SCRIPT_VERSION="version-1.1.1"
 SCRIPT_DATE="Aug 15, 2018"
 
 # the name of the script to install,
@@ -62,7 +62,7 @@ is_sudo() {
 	IS_ROOT=$( id -u )
 	if [ $IS_ROOT != 0 ]; then
 		echo "Please run as root!"
-		echo "try: sudo ./install.sh"
+		echo "try: sudo ./make.sh [OPTION]"
 		exit
 	fi
 }
