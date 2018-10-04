@@ -1,7 +1,7 @@
-## Verry simple, yet packed with feature!
+## Very simple, yet packed with features!
 
-Very simple and functinal bash script to adjust brightness for the official 7 inch touchdcreen. <br>
-Designed and tested for raspberry pi with official 7 inch touchdcreen. 
+Very simple and functinal bash script to adjust the brightness of the official raspberry pi 7 inch touchdcreen. <br>
+ 
 
 <br>
 <br>
